@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Timeline from './components/Timeline';
 import EventCard from './components/EventCard';
 import Quiz from './components/Quiz';
-import Feedback from './components/Feedback'; // Імпортуємо відгуки
+import Feedback from './components/Feedback'; 
 import './style.css'; 
 
 const EventsPage = () => (
@@ -44,11 +44,11 @@ function App() {
                         <Route path="/" element={<Timeline />} />
                         <Route path="/events" element={<EventsPage />} />
                         <Route path="/quiz" element={<Quiz />} />
-                        <Route path="/feedback" element={<Feedback />} /> {/* Новий маршрут */}
+                        <Route path="/feedback" element={<Feedback />} /> 
                     </Routes>
                 </main>
 
-                {/* Глобальний футер, який буде на кожній сторінці */}
+               
                 <footer>
                     <div className="container footer-content">
                         <p>&copy; 2026 MyHistoryZNOHub. Всі права захищені.</p>
