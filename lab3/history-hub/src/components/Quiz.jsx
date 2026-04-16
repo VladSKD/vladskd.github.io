@@ -1,49 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 function Quiz() {
+    const [questions, setQuestions] = useState([]);
     const [score, setScore] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchQuiz = async () => {
+            const querySnapshot = await getDocs(collection(db, "quiz"));
+            setQuestions(querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            setLoading(false);
+        };
+        fetchQuiz();
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         let currentScore = 0;
-        const form = new FormData(e.target);
+        const formData = new FormData(e.target);
         
-        if (form.get('q1') === '1991') currentScore += 1;
-        if (form.get('q2') === 'volodymyr') currentScore += 1;
+        questions.forEach((q) => {
+            if (formData.get(q.id) === q.correctAnswer) {
+                currentScore += 1;
+            }
+        });
         
         setScore(currentScore);
     };
+
+    if (loading) return <div className="container">Завантаження тесту...</div>;
 
     return (
         <section className="container">
             <h2>Перевір свої знання</h2>
             <form onSubmit={handleSubmit} className="quiz-form">
-                <div className="question">
-                    <p>1. У якому році було проголошено незалежність України?</p>
-                    <label><input type="radio" name="q1" value="1990" /> 1990</label>
-                    <label><input type="radio" name="q1" value="1991" /> 1991</label>
-                </div>
-                <div className="question">
-                    <p>2. Хто хрестив Київську Русь?</p>
-                    <label><input type="radio" name="q2" value="volodymyr" /> Володимир Великий</label>
-                    <label><input type="radio" name="q2" value="yaroslav" /> Ярослав Мудрий</label>
-                </div>
+                {questions.map((q) => (
+                    <div key={q.id} className="question" style={{ marginBottom: '20px', padding: '15px', background: 'white', borderRadius: '8px' }}>
+                        <p><strong>{q.question}</strong></p>
+                        {q.options.map((option, idx) => (
+                            <label key={idx} style={{ display: 'block', margin: '5px 0', cursor: 'pointer' }}>
+                                <input type="radio" name={q.id} value={option} required style={{ marginRight: '10px' }} />
+                                {option}
+                            </label>
+                        ))}
+                    </div>
+                ))}
                 <button type="submit" className="btn-submit">Завершити тест</button>
             </form>
 
             {score !== null && (
-                <div style={{ marginTop: '30px', textAlign: 'center' }}>
-                    <h3>Твій результат: {score} з 2</h3>
-                    <div style={{ background: '#ddd', width: '100%', height: '20px', borderRadius: '10px' }}>
-                        <div style={{ 
-                            background: '#27ae60', 
-                            width: `${(score / 2) * 100}%`, 
-                            height: '100%', 
-                            borderRadius: '10px',
-                            transition: 'width 0.5s'
-                        }}></div>
-                    </div>
-                    <p>Графік прогресу: {(score / 2) * 100}% засвоєння</p>
+                <div style={{ marginTop: '30px', textAlign: 'center', padding: '20px', background: '#eafaf1', borderRadius: '8px' }}>
+                    <h3>Твій результат: {score} з {questions.length}</h3>
                 </div>
             )}
         </section>

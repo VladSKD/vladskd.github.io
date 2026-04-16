@@ -4,6 +4,7 @@ import Timeline from './components/Timeline';
 import EventCard from './components/EventCard';
 import Quiz from './components/Quiz';
 import Feedback from './components/Feedback'; 
+import DataUploader from './components/DataUploader';
 import './style.css'; 
 
 const EventsPage = () => (

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-ro
 import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
+
 // Імпорт твоїх компонентів
 import Timeline from './components/Timeline';
 import Quiz from './components/Quiz';
@@ -64,19 +65,25 @@ function App() {
 
                 <main style={{ flex: 1 }}>
                     <Routes>
-                        {/* Публічні маршрути */}
+                        {/* 🟢 ПУБЛІЧНІ МАРШРУТИ (Доступні абсолютно всім) */}
                         <Route path="/" element={<HomePage />} />
                         <Route path="/auth" element={<Auth user={user} />} />
                         
-                        {/* Захищені маршрути */}
-                        <Route path="/events" element={
-                            <ProtectedRoute user={user}><Timeline /></ProtectedRoute>
-                        } />
+                        {/* ОЦЕЙ РЯДОК МИ ЗМІНИЛИ: тепер Хронологія публічна */}
+                        <Route path="/events" element={<Timeline />} /> 
+                        
+
+                        {/* 🔴 ЗАХИЩЕНІ МАРШРУТИ (Перекинуть на сторінку входу, якщо немає user) */}
                         <Route path="/quiz" element={
-                            <ProtectedRoute user={user}><Quiz /></ProtectedRoute>
+                            <ProtectedRoute user={user}>
+                                <Quiz />
+                            </ProtectedRoute>
                         } />
+                        
                         <Route path="/feedback" element={
-                            <ProtectedRoute user={user}><Feedback user={user} /></ProtectedRoute>
+                            <ProtectedRoute user={user}>
+                                <Feedback user={user} />
+                            </ProtectedRoute>
                         } />
                     </Routes>
                 </main>
