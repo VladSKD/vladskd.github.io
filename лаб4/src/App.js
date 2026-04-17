@@ -4,14 +4,13 @@ import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
 
-// Імпорт твоїх компонентів
 import Timeline from './components/Timeline';
 import Quiz from './components/Quiz';
 import Feedback from './components/Feedback';
 import Auth from './components/Auth';
 import './style.css';
 
-// Головна сторінка, яку бачать усі
+
 const HomePage = () => (
     <section className="container" style={{ textAlign: 'center', padding: '50px 0' }}>
         <h1>Вітаємо у MyHistoryZNOHub!</h1>
@@ -22,10 +21,9 @@ const HomePage = () => (
     </section>
 );
 
-// Компонент для захисту сторінок
+
 const ProtectedRoute = ({ user, children }) => {
     if (!user) {
-        // Якщо не залогінений — відправляємо на вхід
         return <Navigate to="/auth" replace />;
     }
     return children;
@@ -65,15 +63,15 @@ function App() {
 
                 <main style={{ flex: 1 }}>
                     <Routes>
-                        {/* 🟢 ПУБЛІЧНІ МАРШРУТИ (Доступні абсолютно всім) */}
+                        {/*  ПУБЛІЧНІ МАРШРУТИ */}
                         <Route path="/" element={<HomePage />} />
                         <Route path="/auth" element={<Auth user={user} />} />
                         
-                        {/* ОЦЕЙ РЯДОК МИ ЗМІНИЛИ: тепер Хронологія публічна */}
+
                         <Route path="/events" element={<Timeline />} /> 
                         
 
-                        {/* 🔴 ЗАХИЩЕНІ МАРШРУТИ (Перекинуть на сторінку входу, якщо немає user) */}
+                        {/*  ЗАХИЩЕНІ МАРШРУТИ */}
                         <Route path="/quiz" element={
                             <ProtectedRoute user={user}>
                                 <Quiz />

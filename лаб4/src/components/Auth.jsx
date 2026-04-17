@@ -15,7 +15,6 @@ function Auth({ user }) {
         e.preventDefault();
         try {
             if (isRegistering) {
-                // 1. Створення акаунта
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const newUser = userCredential.user;
 
