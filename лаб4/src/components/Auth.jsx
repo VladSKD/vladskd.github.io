@@ -18,11 +18,9 @@ function Auth({ user }) {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const newUser = userCredential.user;
 
-                // 2. Оновлення профілю (ім'я та прізвище)
                 const fullName = `${firstName} ${lastName}`;
                 await updateProfile(newUser, { displayName: fullName });
 
-                // 3. Збереження додаткових даних (телефон) у Firestore
                 await setDoc(doc(db, "users", newUser.uid), {
                     firstName,
                     lastName,
